@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EZEmployee</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true">
+      <span class="orb orb-one"></span>
+      <span class="orb orb-two"></span>
+      <span class="grid-glow"></span>
+    </div>
+
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy-wrap">
+          <p class="eyebrow">Employee Operations Suite</p>
+          <h1>EZEmployee</h1>
+          <p class="hero-copy">
+            A premium internal HR workspace with employee profiles, role-based access,
+            attendance, leave management, analytics, and SQLite-backed persistence.
+          </p>
+          <div class="hero-pills">
+            <span class="feature-pill">SQLite Data Layer</span>
+            <span class="feature-pill">Role-Based Login</span>
+            <span class="feature-pill">Attendance Tracking</span>
+            <span class="feature-pill">Leave Workflow</span>
+            <span class="feature-pill">Profile Photos</span>
+          </div>
+        </div>
+        <div class="hero-aside">
+          <div class="theme-row">
+            <button id="themeToggle" class="theme-toggle" type="button">Dark Theme</button>
+          </div>
+          <div class="hero-badge">
+            <span>Platform Mode</span>
+            <strong>HR Command Center</strong>
+          </div>
+          <div class="hero-mini-grid">
+            <article class="mini-card">
+              <span>Storage</span>
+              <strong>SQLite</strong>
+            </article>
+            <article class="mini-card">
+              <span>Profiles</span>
+              <strong>Photo Ready</strong>
+            </article>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-stack">
+        <section id="loginPanel" class="panel login-panel">
+          <div class="panel-header">
+            <h2>Sign In</h2>
+            <p>Choose staff access for admin workflows or employee access for self-service attendance and leave requests.</p>
+          </div>
+
+          <div class="login-split">
+            <section class="login-card">
+              <div class="panel-header">
+                <span class="section-badge">Staff Access</span>
+                <h3>Admin, HR, and Manager</h3>
+                <p>Operational access to the HR dashboard and employee administration modules.</p>
+              </div>
+              <div id="demoAccounts" class="demo-account-grid"></div>
+              <form id="staffLoginForm" class="form-grid compact login-form">
+                <label>
+                  Username
+                  <input id="loginUsername" name="username" type="text" value="admin" required />
+                </label>
+                <label>
+                  Password
+                  <input id="loginPassword" name="password" type="password" value="admin123" required />
+                </label>
+                <button type="submit" class="primary">Staff Sign In</button>
+              </form>
+            </section>
+
+            <section class="login-card">
+              <div class="panel-header">
+                <span class="section-badge">Employee Access</span>
+                <h3>Employee Self Service</h3>
+                <p>Employees can log in to submit their own attendance and leave requests.</p>
+              </div>
+              <div id="employeeDemoAccounts" class="demo-account-grid"></div>
+              <form id="employeeLoginForm" class="form-grid compact login-form">
+                <label>
+                  Employee Username
+                  <input id="employeeLoginUsername" name="username" type="text" placeholder="emp101" required />
+                </label>
+                <label>
+                  Password
+                  <input id="employeeLoginPassword" name="password" type="password" value="employee123" required />
+                </label>
+                <button type="submit" class="primary">Employee Sign In</button>
+              </form>
+            </section>
+          </div>
+
+          <div class="login-support-grid">
+            <section class="login-card support-card">
+              <div class="panel-header">
+                <span class="section-badge">Password Help</span>
+                <h3>Request Reset Code</h3>
+                <p>This demo version shows the reset code on screen instead of sending email.</p>
+              </div>
+              <form id="forgotPasswordForm" class="form-grid compact login-form">
+                <label>
+                  Username
+                  <input id="forgotUsername" type="text" placeholder="admin or emp101" required />
+                </label>
+                <button type="submit" class="secondary">Generate Reset Code</button>
+              </form>
+              <div id="resetCodeResult" class="support-result hidden"></div>
+            </section>
+
+            <section class="login-card support-card">
+              <div class="panel-header">
+                <span class="section-badge">Password Reset</span>
+                <h3>Reset With Code</h3>
+                <p>Use the generated code and choose a new password with at least 8 characters.</p>
+              </div>
+              <form id="resetPasswordForm" class="form-grid compact login-form">
+                <label>
+                  Username
+                  <input id="resetUsername" type="text" placeholder="admin or emp101" required />
+                </label>
+                <label>
+                  Reset Code
+                  <input id="resetCode" type="text" placeholder="6-digit code" required />
+                </label>
+                <label>
+                  New Password
+                  <input id="resetNewPassword" type="password" placeholder="Minimum 8 characters" required />
+                </label>
+                <button type="submit" class="primary">Reset Password</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section id="appPanel" class="app-panel hidden">
+          <div class="dashboard-shell">
+            <aside class="panel sidebar-panel">
+              <div class="profile-card">
+                <div id="sidebarAvatar" class="profile-avatar">AD</div>
+                <div class="profile-copy">
+                  <strong id="sidebarUserName">Admin User</strong>
+                  <span id="sidebarUserRole">Admin</span>
+                </div>
+                <span class="profile-status">Online</span>
+              </div>
+
+              <div class="sidebar-brand">
+                <p class="eyebrow">Control Center</p>
+                <h2>EZEmployee</h2>
+                <p class="sidebar-copy">
+                  Internal employee operations dashboard for records, staffing visibility, and
+                  administrative workflows.
+                </p>
+              </div>
+
+              <nav class="sidebar-nav" aria-label="Dashboard navigation">
+                <button class="nav-item active" type="button" data-target="overviewSection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 13h6V4H4zm0 7h6v-5H4zm10 0h6V11h-6zm0-16v5h6V4z"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Overview</strong>
+                    <small>Metrics and reporting</small>
+                  </span>
+                </button>
+                <button class="nav-item" type="button" data-target="operationsSection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 5h18v2H3zm2 4h14v10H5zm3 2v6h2v-6zm4 0v6h2v-6zm4 0v6h2v-6z"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Operations</strong>
+                    <small>Employee creation and edits</small>
+                  </span>
+                </button>
+                <button class="nav-item" type="button" data-target="attendanceSection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m1 11h-5V7h2v4h3z"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Attendance</strong>
+                    <small>Daily workforce tracking</small>
+                  </span>
+                </button>
+                <button class="nav-item" type="button" data-target="leaveSection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M19 3H5c-1.1 0-2 .9-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 16H5V8h14zm-9-8H7v2h3zm7 4H7v2h10zm0-8H7v2h10z"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Leave</strong>
+                    <small>Requests and approvals</small>
+                  </span>
+                </button>
+                <button id="managerApprovalsNav" class="nav-item hidden" type="button" data-target="managerApprovalsSection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2 1 21h22zm1 14h-2v2h2zm0-6h-2v4h2z"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Approvals</strong>
+                    <small>Manager-only leave queue</small>
+                  </span>
+                </button>
+                <button class="nav-item" type="button" data-target="directorySection">
+                  <span class="nav-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3M8 11c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3m0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13m8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.96 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5"></path>
+                    </svg>
+                  </span>
+                  <span>
+                    <strong>Directory</strong>
+                    <small>Profiles and records</small>
+                  </span>
+                </button>
+              </nav>
+
+              <div class="sidebar-card">
+                <span class="sidebar-label">Access Level</span>
+                <strong id="sidebarRoleHeadline">Administrative Control</strong>
+                <p id="sidebarRoleDescription">
+                  This role can manage employee records, attendance, leave workflow, and reporting.
+                </p>
+              </div>
+            </aside>
+
+            <div class="dashboard-main">
+              <section class="toolbar" id="overviewSection">
+                <div class="toolbar-copy">
+                  <h2>EZEmployee</h2>
+                  <p class="toolbar-subcopy">
+                    Complete employee operations with profile management, attendance, leave
+                    workflow, and executive reporting.
+                  </p>
+                </div>
+                <div class="toolbar-actions">
+                  <span id="currentRoleBadge" class="role-badge">Admin</span>
+                  <button id="openCreateModal" class="primary" type="button">Add Employee</button>
+                  <button id="exportButton" class="secondary" type="button">Export CSV</button>
+                  <button id="logoutButton" class="ghost" type="button">Logout</button>
+                </div>
+              </section>
+
+              <section class="stats-grid">
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 19h16V5H4zm3-8h10v2H7zm0 4h6v2H7zm0-8h10v2H7z"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Directory Size</span>
+                  <span>Total Employees</span>
+                  <strong id="totalEmployees">0</strong>
+                </article>
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m-1 15-4-4 1.41-1.41L11 14.17l5.59-5.58L18 10z"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Active Workforce</span>
+                  <span>Active Employees</span>
+                  <strong id="activeEmployees">0</strong>
+                </article>
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Inactive Count</span>
+                  <span>Inactive Employees</span>
+                  <strong id="inactiveEmployees">0</strong>
+                </article>
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 13h8V3H3zm10 8h8v-8h-8zM3 21h8v-6H3zm10-10h8V3h-8z"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Structure</span>
+                  <span>Departments</span>
+                  <strong id="departmentCount">0</strong>
+                </article>
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M19 3H5c-1.1 0-2 .9-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m0 16H5V8h14zm-9-8H7v2h3zm7 4H7v2h10zm0-8H7v2h10z"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Workflow</span>
+                  <span>Pending Leaves</span>
+                  <strong id="pendingLeaves">0</strong>
+                </article>
+                <article class="stat-card">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 2a10 10 0 0 0-3.516 19.36c.556.102.758-.242.758-.538 0-.266-.01-1.14-.015-2.066-3.084.67-3.735-1.486-3.735-1.486-.504-1.28-1.232-1.62-1.232-1.62-1.008-.688.076-.674.076-.674 1.115.079 1.701 1.145 1.701 1.145.99 1.697 2.597 1.206 3.23.922.1-.717.388-1.206.706-1.483-2.462-.28-5.053-1.23-5.053-5.476 0-1.21.433-2.2 1.144-2.976-.115-.28-.496-1.408.108-2.936 0 0 .933-.299 3.058 1.137A10.64 10.64 0 0 1 12 6.844c.943.004 1.893.127 2.78.374 2.123-1.436 3.055-1.137 3.055-1.137.605 1.528.224 2.656.11 2.936.713.776 1.142 1.766 1.142 2.976 0 4.256-2.596 5.193-5.066 5.467.398.344.752 1.021.752 2.057 0 1.485-.013 2.682-.013 3.046 0 .299.2.646.764.536A10 10 0 0 0 12 2"></path>
+                    </svg>
+                  </div>
+                  <span class="stat-kicker">Daily Presence</span>
+                  <span>Attendance Today</span>
+                  <strong id="attendanceTodayTotal">0</strong>
+                </article>
+              </section>
+
+              <section id="analyticsSection" class="analytics-grid">
+                <article class="panel analytics-panel">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <span class="section-badge">Status Analytics</span>
+                      <h3>Employee Status</h3>
+                    </div>
+                    <p>Live distribution of active and inactive employees.</p>
+                  </div>
+                  <div class="status-chart-layout">
+                    <div id="statusChart" class="status-chart">
+                      <div class="status-chart-core">
+                        <strong id="statusChartTotal">0</strong>
+                        <span>Total</span>
+                      </div>
+                    </div>
+                    <div id="statusLegend" class="status-legend"></div>
+                  </div>
+                </article>
+
+                <article class="panel analytics-panel">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <span class="section-badge">Departments</span>
+                      <h3>Department Breakdown</h3>
+                    </div>
+                    <p>Team distribution across departments.</p>
+                  </div>
+                  <div id="departmentChart" class="bar-chart"></div>
+                </article>
+
+                <article class="panel analytics-panel">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <span class="section-badge">Roles</span>
+                      <h3>Role Distribution</h3>
+                    </div>
+                    <p>Most represented role titles in the directory.</p>
+                  </div>
+                  <div id="roleChart" class="bar-chart"></div>
+                </article>
+
+                <article class="panel analytics-panel">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <span class="section-badge">Attendance Trend</span>
+                      <h3>Recent Presence</h3>
+                    </div>
+                    <p>Present and remote attendance over the last few days.</p>
+                  </div>
+                  <div id="attendanceTrendChart" class="trend-chart"></div>
+                </article>
+              </section>
+
+              <section class="workspace-grid">
+                <div class="stack-grid">
+                  <article id="operationsSection" class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Quick Actions</span>
+                        <h3>Operations Center</h3>
+                      </div>
+                      <p>Launch employee creation, editing, and reporting tasks quickly.</p>
+                    </div>
+                    <div class="action-list">
+                      <button id="openCreateModalSecondary" class="action-tile" type="button">
+                        <span class="action-icon">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path>
+                          </svg>
+                        </span>
+                        <span>
+                          <strong>Create Employee</strong>
+                          <small>Open the employee profile modal with photo upload support.</small>
+                        </span>
+                      </button>
+                      <button id="openEditHint" class="action-tile muted-action" type="button">
+                        <span class="action-icon">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a1.003 1.003 0 0 0 0-1.42L18.37 3.29a1.003 1.003 0 0 0-1.42 0L15.13 5.11l3.75 3.75z"></path>
+                          </svg>
+                        </span>
+                        <span>
+                          <strong>Edit Existing Profiles</strong>
+                          <small>Use directory actions to open a saved employee profile for editing.</small>
+                        </span>
+                      </button>
+                    </div>
+                  </article>
+
+                  <article id="attendanceSection" class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Attendance</span>
+                        <h3>Attendance Manager</h3>
+                      </div>
+                      <p>Mark daily attendance for any employee with status and timing.</p>
+                    </div>
+                    <form id="attendanceForm" class="form-grid">
+                      <label>
+                        Employee
+                        <select id="attendanceEmployeeId" required></select>
+                      </label>
+                      <label>
+                        Date
+                        <input id="attendanceDate" type="date" required />
+                      </label>
+                      <label>
+                        Status
+                        <select id="attendanceStatus" required>
+                          <option value="Present">Present</option>
+                          <option value="Remote">Remote</option>
+                          <option value="Absent">Absent</option>
+                          <option value="On Leave">On Leave</option>
+                        </select>
+                      </label>
+                      <label>
+                        Check In
+                        <input id="attendanceCheckIn" type="time" />
+                      </label>
+                      <label>
+                        Check Out
+                        <input id="attendanceCheckOut" type="time" />
+                      </label>
+                      <label class="full-width">
+                        Notes
+                        <textarea id="attendanceNotes" rows="3" placeholder="Optional attendance note"></textarea>
+                      </label>
+                      <div class="button-row full-width">
+                        <button type="submit" class="primary">Save Attendance</button>
+                      </div>
+                    </form>
+                    <div class="mini-table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Employee</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody">
+                          <tr>
+                            <td colspan="3" class="empty-state">No attendance records available.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </article>
+
+                  <article id="leaveSection" class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Leave Workflow</span>
+                        <h3>Leave Management</h3>
+                      </div>
+                      <p>Raise leave requests and review leave history. Approvals are handled in the dedicated manager queue.</p>
+                    </div>
+                    <div id="staffSelfLeaveHint" class="context-note hidden">
+                      <div>
+                        <strong>Linked staff profile detected</strong>
+                        <p>You can apply for your own leave directly as a staff member, or submit leave for another employee if needed.</p>
+                      </div>
+                      <button id="useOwnLeaveProfile" class="secondary" type="button">Use My Profile</button>
+                    </div>
+                    <form id="leaveForm" class="form-grid">
+                      <label>
+                        Employee
+                        <select id="leaveEmployeeId" required></select>
+                      </label>
+                      <label>
+                        Leave Type
+                        <select id="leaveType" required>
+                          <option value="Annual Leave">Annual Leave</option>
+                          <option value="Sick Leave">Sick Leave</option>
+                          <option value="Work From Home">Work From Home</option>
+                          <option value="Emergency Leave">Emergency Leave</option>
+                        </select>
+                      </label>
+                      <label>
+                        Start Date
+                        <input id="leaveStartDate" type="date" required />
+                      </label>
+                      <label>
+                        End Date
+                        <input id="leaveEndDate" type="date" required />
+                      </label>
+                      <label class="full-width">
+                        Reason
+                        <textarea id="leaveReason" rows="3" placeholder="Reason for the leave request"></textarea>
+                      </label>
+                      <div class="button-row full-width">
+                        <button type="submit" class="primary">Submit Leave</button>
+                      </div>
+                    </form>
+                    <div class="mini-table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Employee</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Reviewer</th>
+                          </tr>
+                        </thead>
+                        <tbody id="leaveTableBody">
+                          <tr>
+                            <td colspan="4" class="empty-state">No leave requests available.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </article>
+
+                  <article id="accountSection" class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Security</span>
+                        <h3>Account Security</h3>
+                      </div>
+                      <p>Change your current account password without leaving the dashboard.</p>
+                    </div>
+                    <form id="staffPasswordForm" class="form-grid compact">
+                      <label>
+                        Current Password
+                        <input id="staffCurrentPassword" type="password" required />
+                      </label>
+                      <label>
+                        New Password
+                        <input id="staffNewPassword" type="password" placeholder="Minimum 8 characters" required />
+                      </label>
+                      <div class="button-row full-width">
+                        <button type="submit" class="secondary">Update Password</button>
+                      </div>
+                    </form>
+                  </article>
+
+                  <article class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Activity</span>
+                        <h3>Recent Activity</h3>
+                      </div>
+                      <p>Audit-style activity feed from records, attendance, and leave actions.</p>
+                    </div>
+                    <div id="activityFeed" class="activity-feed"></div>
+                  </article>
+                </div>
+
+                <div class="stack-grid">
+                  <article id="managerApprovalsSection" class="panel hidden">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Manager Queue</span>
+                        <h3>Pending Leave Approvals</h3>
+                      </div>
+                      <p>Only managers can approve or reject pending leave requests from this separate workflow queue.</p>
+                    </div>
+                    <div class="table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Dates</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="managerApprovalTableBody">
+                          <tr>
+                            <td colspan="6" class="empty-state">No pending approvals.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </article>
+
+                  <article id="directorySection" class="panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Directory</span>
+                        <h3>Employee Directory</h3>
+                      </div>
+                      <p>Search employees, open profiles, and edit records by role.</p>
+                    </div>
+                    <div class="filters">
+                      <input id="searchInput" type="search" placeholder="Search by ID, name, email, role..." />
+                      <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                      </select>
+                      <select id="departmentFilter">
+                        <option value="">All Departments</option>
+                      </select>
+                    </div>
+                    <div class="table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                          <tr>
+                            <td colspan="7" class="empty-state">No employee records available.</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="report-box">
+                      <h4>Department Snapshot</h4>
+                      <div id="departmentSummary" class="chip-list"></div>
+                    </div>
+                  </article>
+
+                  <article class="panel profile-panel">
+                    <div class="panel-header compact-header">
+                      <div>
+                        <span class="section-badge">Profile</span>
+                        <h3>Employee Profile</h3>
+                      </div>
+                      <p>Focused profile view with recent attendance and leave history.</p>
+                    </div>
+                    <div id="profileEmptyState" class="empty-state">
+                      Select an employee from the directory to view the full profile.
+                    </div>
+                    <div id="profileContent" class="profile-content hidden">
+                      <div class="profile-hero">
+                        <img id="profilePhoto" class="profile-photo" alt="Employee profile" />
+                        <div class="profile-meta">
+                          <h4 id="profileName">Employee Name</h4>
+                          <p id="profileHeadline" class="profile-headline">Department - Role</p>
+                          <div class="profile-tags">
+                            <span id="profileEmployeeCode" class="chip">EMP000</span>
+                            <span id="profileStatus" class="chip">Active</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="profile-grid">
+                        <div class="info-card">
+                          <span>Email</span>
+                          <strong id="profileEmail">-</strong>
+                        </div>
+                        <div class="info-card">
+                          <span>Contact</span>
+                          <strong id="profileContact">-</strong>
+                        </div>
+                        <div class="info-card">
+                          <span>Joined On</span>
+                          <strong id="profileJoinedOn">-</strong>
+                        </div>
+                        <div class="info-card">
+                          <span>Last Updated</span>
+                          <strong id="profileUpdatedAt">-</strong>
+                        </div>
+                      </div>
+
+                      <div class="profile-notes">
+                        <h4>Notes</h4>
+                        <p id="profileNotes">No notes available.</p>
+                      </div>
+
+                      <div class="profile-summary-grid">
+                        <div>
+                          <h4>Attendance Summary</h4>
+                          <div id="profileAttendanceSummary" class="summary-list"></div>
+                        </div>
+                        <div>
+                          <h4>Leave Summary</h4>
+                          <div id="profileLeaveSummary" class="summary-list"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="employeePanel" class="app-panel hidden">
+          <div class="employee-shell">
+            <section class="panel employee-hero-panel">
+              <div class="toolbar">
+                <div class="toolbar-copy">
+                  <p class="eyebrow">Employee Portal</p>
+                  <h2 id="employeePortalName">Employee Self Service</h2>
+                  <p class="toolbar-subcopy">
+                    Submit your own attendance, request leave, and review your recent records.
+                  </p>
+                </div>
+                <div class="toolbar-actions">
+                  <span id="employeePortalCode" class="role-badge">EMP000</span>
+                  <button id="employeeLogoutButton" class="ghost" type="button">Logout</button>
+                </div>
+              </div>
+
+                <div class="employee-hero-grid">
+                  <div class="profile-card profile-card-large">
+                  <img id="employeePortalPhoto" class="profile-photo large-photo" alt="Employee profile" />
+                  <div class="profile-copy">
+                    <strong id="employeePortalRole">Role</strong>
+                    <span id="employeePortalDepartment">Department</span>
+                  </div>
+                  <span id="employeePortalStatus" class="profile-status">Active</span>
+                  </div>
+                  <div class="employee-summary-card">
+                    <span class="sidebar-label">Portal Access</span>
+                    <p id="employeePortalUsername">Username: -</p>
+                    <span class="sidebar-label">Your Notes</span>
+                    <p id="employeePortalNotes">No notes available.</p>
+                  </div>
+                </div>
+            </section>
+
+            <section class="employee-panel-grid">
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Attendance</span>
+                    <h3>Submit Attendance</h3>
+                  </div>
+                  <p>Mark your own attendance for the day with status and timings.</p>
+                </div>
+                <form id="employeeAttendanceForm" class="form-grid compact">
+                  <label>
+                    Date
+                    <input id="employeeAttendanceDate" type="date" required />
+                  </label>
+                  <label>
+                    Status
+                    <select id="employeeAttendanceStatus" required>
+                      <option value="Present">Present</option>
+                      <option value="Remote">Remote</option>
+                      <option value="Absent">Absent</option>
+                      <option value="On Leave">On Leave</option>
+                    </select>
+                  </label>
+                  <label>
+                    Check In
+                    <input id="employeeAttendanceCheckIn" type="time" />
+                  </label>
+                  <label>
+                    Check Out
+                    <input id="employeeAttendanceCheckOut" type="time" />
+                  </label>
+                  <label class="full-width">
+                    Notes
+                    <textarea id="employeeAttendanceNotes" rows="3" placeholder="Optional attendance note"></textarea>
+                  </label>
+                  <div class="button-row full-width">
+                    <button type="submit" class="primary">Submit Attendance</button>
+                  </div>
+                </form>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Leave Request</span>
+                    <h3>Request Leave</h3>
+                  </div>
+                  <p>Submit your own leave request for approval.</p>
+                </div>
+                <form id="employeeLeaveForm" class="form-grid compact">
+                  <label>
+                    Leave Type
+                    <select id="employeeLeaveType" required>
+                      <option value="Annual Leave">Annual Leave</option>
+                      <option value="Sick Leave">Sick Leave</option>
+                      <option value="Work From Home">Work From Home</option>
+                      <option value="Emergency Leave">Emergency Leave</option>
+                    </select>
+                  </label>
+                  <label>
+                    Start Date
+                    <input id="employeeLeaveStartDate" type="date" required />
+                  </label>
+                  <label>
+                    End Date
+                    <input id="employeeLeaveEndDate" type="date" required />
+                  </label>
+                  <label class="full-width">
+                    Reason
+                    <textarea id="employeeLeaveReason" rows="3" placeholder="Reason for your leave"></textarea>
+                  </label>
+                  <div class="button-row full-width">
+                    <button type="submit" class="primary">Submit Leave</button>
+                  </div>
+                </form>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Profile</span>
+                    <h3>Edit Personal Information</h3>
+                  </div>
+                  <p>Update your own name, email, contact number, notes, and profile photo.</p>
+                </div>
+                <form id="employeeProfileForm" class="form-grid compact">
+                  <label>
+                    Full Name
+                    <input id="employeeProfileName" type="text" required />
+                  </label>
+                  <label>
+                    Email
+                    <input id="employeeProfileEmail" type="email" required />
+                  </label>
+                  <label>
+                    Contact Number
+                    <input id="employeeProfileContactNumber" type="text" required />
+                  </label>
+                  <label class="full-width">
+                    Personal Notes
+                    <textarea id="employeeProfileNotes" rows="3" placeholder="Update your notes"></textarea>
+                  </label>
+                  <label class="full-width">
+                    Profile Photo
+                    <input id="employeeProfilePhoto" type="file" accept="image/png,image/jpeg,image/webp" />
+                  </label>
+                  <div class="photo-preview-wrap full-width">
+                    <img id="employeeProfilePhotoPreview" class="photo-preview hidden" alt="Employee profile preview" />
+                  </div>
+                  <div class="button-row full-width">
+                    <button type="submit" class="secondary">Save Profile</button>
+                  </div>
+                </form>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Security</span>
+                    <h3>Change Password</h3>
+                  </div>
+                  <p>Secure your employee account with a new password.</p>
+                </div>
+                <form id="employeePasswordForm" class="form-grid compact">
+                  <label>
+                    Current Password
+                    <input id="employeeCurrentPassword" type="password" required />
+                  </label>
+                  <label>
+                    New Password
+                    <input id="employeeNewPassword" type="password" placeholder="Minimum 8 characters" required />
+                  </label>
+                  <div class="button-row full-width">
+                    <button type="submit" class="secondary">Update Password</button>
+                  </div>
+                </form>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Recent Attendance</span>
+                    <h3>Your Attendance History</h3>
+                  </div>
+                  <p>View your latest submitted attendance entries.</p>
+                </div>
+                <div class="mini-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                      </tr>
+                    </thead>
+                    <tbody id="employeeAttendanceTableBody">
+                      <tr>
+                        <td colspan="4" class="empty-state">No attendance records available.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header compact-header">
+                  <div>
+                    <span class="section-badge">Leave History</span>
+                    <h3>Your Leave Requests</h3>
+                  </div>
+                  <p>Track the status of your submitted leave requests.</p>
+                </div>
+                <div class="mini-table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Dates</th>
+                        <th>Status</th>
+                        <th>Reviewer Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody id="employeeLeaveTableBody">
+                      <tr>
+                        <td colspan="4" class="empty-state">No leave requests available.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="employeeModal" class="modal hidden" aria-hidden="true">
+      <div id="modalBackdrop" class="modal-backdrop"></div>
+      <section class="modal-dialog panel" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+        <div class="modal-header">
+          <div>
+            <span class="section-badge">Employee Form</span>
+            <h3 id="formTitle">Add Employee</h3>
+          </div>
+          <button id="closeModalButton" class="ghost icon-button" type="button" aria-label="Close modal">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form id="employeeForm" class="form-grid">
+          <input id="formMode" type="hidden" value="create" />
+          <input id="editingEmployeeId" type="hidden" value="" />
+          <label>
+            Employee ID
+            <input id="employeeId" name="employeeId" type="text" placeholder="EMP101" required />
+          </label>
+          <label>
+            Full Name
+            <input id="name" name="name" type="text" placeholder="Enter employee name" required />
+          </label>
+          <label>
+            Email
+            <input id="email" name="email" type="email" placeholder="name@example.com" required />
+          </label>
+          <label>
+            Contact Number
+            <input id="contactNumber" name="contactNumber" type="text" placeholder="+91 9876543210" required />
+          </label>
+          <label>
+            Department
+            <input id="department" name="department" type="text" placeholder="Engineering" />
+          </label>
+          <label>
+            Role Title
+            <input id="role" name="role" type="text" placeholder="Backend Engineer" />
+          </label>
+          <label>
+            Joined On
+            <input id="joinedOn" name="joinedOn" type="date" />
+          </label>
+          <label>
+            Status
+            <select id="status" name="status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </label>
+          <label class="full-width">
+            Notes
+            <textarea id="notes" name="notes" rows="4" placeholder="Optional employee notes"></textarea>
+          </label>
+          <label class="full-width">
+            Profile Photo
+            <input id="employeePhoto" type="file" accept="image/png,image/jpeg,image/webp" />
+          </label>
+          <div class="photo-preview-wrap full-width">
+            <img id="photoPreview" class="photo-preview hidden" alt="Selected employee preview" />
+          </div>
+          <div class="button-row full-width">
+            <button type="submit" class="primary">Save Employee</button>
+            <button id="resetButton" type="button" class="secondary">Reset</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

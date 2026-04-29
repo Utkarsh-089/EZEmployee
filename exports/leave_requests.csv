@@ -1,0 +1,5 @@
+"id","employee_id","leave_type","start_date","end_date","reason","status","reviewer_notes","created_at","updated_at","created_by","reviewed_by"
+"1","1","Annual Leave","2026-05-02","2026-05-05","Family travel","Approved","Approved for planned travel.","2026-04-28T20:03:02.877Z","2026-04-28T20:03:02.877Z","admin","admin"
+"2","2","Sick Leave","2026-05-06","2026-05-06","Medical check-up","Approved","","2026-04-28T20:03:02.881Z","2026-04-29T08:18:34.825Z","admin","hrlead"
+"3","3","Work From Home","2026-05-08","2026-05-09","Temporary remote arrangement","Rejected","Please coordinate with department lead.","2026-04-28T20:03:02.885Z","2026-04-28T20:03:02.885Z","admin","admin"
+"5","5","Emergency Leave","2026-04-30","2026-05-02","","Pending","","2026-04-29T08:20:24.544Z","2026-04-29T08:20:24.544Z","admin",""

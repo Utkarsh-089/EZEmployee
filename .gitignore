@@ -1,0 +1,5 @@
+data/*.bak
+data/*.db
+uploads/*
+!uploads/.gitkeep
+node_modules/

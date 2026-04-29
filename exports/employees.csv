@@ -1,0 +1,7 @@
+"id","employee_code","name","email","contact_number","department","role_title","joined_on","status","notes","photo_path","created_at","updated_at","created_by","updated_by"
+"1","EMP101","Utkarsh Chauhan","utkarsh05@gmail.com","9897846418","IT","Software Developer","2026-04-01","Active","","","2026-04-28T19:00:53.006Z","2026-04-28T19:16:00.355Z","admin","admin"
+"2","EMP102","Rohank","rohank@gmail.com","9297145889","Finance","Sales Coordinator","2026-04-20","Active","","","2026-04-28T19:04:45.597Z","2026-04-29T08:11:27.611Z","admin","admin"
+"3","EMP103","Saksham","saksham95@gmail.com","9864321765","Marketing","Analyst","2026-04-21","Active","","","2026-04-28T19:11:41.962Z","2026-04-29T08:12:11.594Z","admin","admin"
+"4","EMP104","Rehan","rehan12@gmail.com","7667345719","Marketing","Content Marketer","2026-04-08","Inactive","","","2026-04-28T19:12:50.039Z","2026-04-29T08:12:50.509Z","admin","admin"
+"5","EMP105","Aayush Negi","negi123@gmail.com","9219626316","Operations","Supervisor","2026-04-21","Active","","","2026-04-28T19:15:38.402Z","2026-04-29T08:12:34.941Z","admin","admin"
+"6","EMP106","Yash","yash7@gmail.com","9816153337","Human Resource","Hiring Manager","2026-04-18","Active","","","2026-04-28T19:18:52.815Z","2026-04-29T08:12:25.347Z","admin","admin"

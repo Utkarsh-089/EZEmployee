@@ -1,0 +1,15 @@
+{
+  "name": "ezemployee-web",
+  "version": "1.0.0",
+  "description": "EZEmployee web-based employee management system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "employee-management",
+    "nodejs",
+    "vanilla-js"
+  ],
+  "license": "MIT"
+}
