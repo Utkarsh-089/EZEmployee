@@ -286,7 +286,7 @@ function getThemeLabel(theme) {
 }
 
 function applyTheme(theme) {
-  const resolvedTheme = theme === "light" ? "light" : "dark";
+  const resolvedTheme = "dark";
   document.documentElement.setAttribute("data-theme", resolvedTheme);
   localStorage.setItem(THEME_STORAGE_KEY, resolvedTheme);
   if (themeToggle) {
@@ -295,8 +295,7 @@ function applyTheme(theme) {
 }
 
 function initializeTheme() {
-  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-  applyTheme(savedTheme || document.documentElement.getAttribute("data-theme") || "dark");
+  applyTheme("dark");
 }
 
 function openEmployeeModal() {
@@ -1474,8 +1473,7 @@ navItems.forEach((item) => {
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
-    applyTheme(currentTheme === "dark" ? "light" : "dark");
+    applyTheme("dark");
   });
 }
 
